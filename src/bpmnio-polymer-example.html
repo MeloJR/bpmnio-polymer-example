@@ -1,0 +1,59 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<link rel="import" href="diagram-styles.html">
+
+<script src="../bower_components/bpmn-js/dist/bpmn-modeler.js"></script>
+
+<dom-module id="bpmnio-polymer-example">
+  <template>
+    <style include="diagram-styles">
+      :host {
+        display: block;
+      }
+      #canvas {
+        height: 100vh;
+        width: 100vw;
+      }
+    </style>
+    <div id="canvas"></div>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class BpmnioPolymerExample extends Polymer.Element {
+      static get is() { return 'bpmnio-polymer-example'; }
+      
+      ready() {
+        super.ready();
+        var BpmnViewer = window.BpmnJS;
+
+        var xml = '/src/diagram.bpmn'; // ADD BPMN 2.0 XML HERE
+        var viewer = new BpmnViewer({ container: this.$.canvas });
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            viewer.importXML(xhr.response, function(err) {
+              if (err) {
+                console.log('error rendering', err);
+              } else {
+                console.log('rendered');
+                var canvas = viewer.get('canvas');
+                canvas.zoom('fit-viewport');
+              }
+            });
+          }
+        };
+
+        xhr.open('GET', xml);
+        xhr.send(null);
+      }
+    }
+
+    window.customElements.define(BpmnioPolymerExample.is, BpmnioPolymerExample);
+  </script>
+</dom-module>

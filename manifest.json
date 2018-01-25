@@ -1,0 +1,6 @@
+{
+  "name": "bpmnio-polymer-example",
+  "short_name": "bpmnio-polymer-example",
+  "start_url": "/",
+  "display": "standalone"
+}
